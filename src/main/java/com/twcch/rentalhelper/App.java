@@ -16,7 +16,7 @@ public class App {
 
     public static void printHouseQuery() {
 
-        System.out.println("請輸入物件名稱 (A or B or C): ");
+        System.out.println("請輸入物件索引: ");
 
     }
 
@@ -32,38 +32,19 @@ public class App {
 
     }
 
-    public static String getHouseString(String id, float area, String type, int price, String owner, String address) {
+    public static String getHouseString(int id, float area, String type, int price, String owner, String address) {
 
-        return id + "物件 - " + area + "坪 - " + type + " - 每月" + price + "元 - 屋主: " + owner + " - 地址: " + address;
+        return "索引" + id + "物件 - " + area + "坪 - " + type + " - 每月" + price + "元 - 屋主: " + owner + " - 地址: " + address;
 
     }
 
     public static void main(String[] args) {
 
-        // A 租屋物件資料
-        float areaA = 10F;
-        String typeA = "套房";
-        int priceA = 12000;
-        String ownerA = "王先生";
-        String addressA = "台北市文山區木柵路一段xx號";
-
-        // B 租屋物件資料
-        float areaB = 8F;
-        String typeB = "套房";
-        int priceB = 8000;
-        String ownerB = "陳先生";
-        String addressB = "新北市中和區中和路yy號";
-
-        // C 租屋物件資料
-        float areaC = 4F;
-        String typeC = "雅房";
-        int priceC = 6000;
-        String ownerC = "林先生";
-        String addressC = "新北市新店區中正路aa巷zz號";
-
-        String infoA = getHouseString("A", areaA, typeA, priceA, ownerA, addressA);
-        String infoB = getHouseString("B", areaB, typeB, priceB, ownerB, addressB);
-        String infoC = getHouseString("C", areaC, typeC, priceC, ownerC, addressC);
+        float[] areas = new float[]{10F, 8F, 4F};
+        String[] types = new String[]{"套房", "套房", "雅房"};
+        int[] prices = new int[]{12000, 8000, 6000};
+        String[] owners = new String[]{"王先生", "陳先生", "林先生"};
+        String[] addresses = new String[]{"台北市文山區木柵路一段xx號", "新北市中和區中和路yy號", "新北市新店區中正路aa巷zz號"};
 
         Scanner scanner = new Scanner(System.in);
 
@@ -78,29 +59,23 @@ public class App {
 
                 switch (option) {
                     case 1:
-                        System.out.println(infoA);
-                        System.out.println(infoB);
-                        System.out.println(infoC);
+                        for (int i = 0; i < areas.length; i++) {
+                            System.out.println(getHouseString(i, areas[i], types[i], prices[i], owners[i], addresses[i]));
+                        }
+
                         break;
                     case 2: { // 建立 block ，可以讓 case 2 與 case 3 的變數屬於不同 block
 
                         printHouseQuery();
 
-                        String id = scanner.next();
-                        switch (id) {
-                            case "A":
-                                System.out.println(infoA);
-                                break;
-                            case "B":
-                                System.out.println(infoB);
-                                break;
-                            case "C":
-                                System.out.println(infoC);
-                                break;
-                            default:
-                                printHouseNotFound();
-                                break;
+                        int index = scanner.nextInt();
+
+                        if (index >= 0 && index < areas.length) {
+                            System.out.println(getHouseString(index, areas[index], types[index], prices[index], owners[index], addresses[index]));
+                        } else {
+                            printHouseNotFound();
                         }
+
                         break;
                     }
                     case 3: {
@@ -108,21 +83,14 @@ public class App {
 
                         printHouseQuery();
 
-                        String id = scanner.next();
+                        int index = scanner.nextInt();
                         int monthlyPrice = 0;
-                        switch (id) {
-                            case "A":
-                                monthlyPrice = priceA;
-                                break;
-                            case "B":
-                                monthlyPrice = priceB;
-                                break;
-                            case "C":
-                                monthlyPrice = priceC;
-                                break;
-                            default:
-                                printHouseNotFound();
-                                continue;
+
+                        if (index >= 0 && index < areas.length) {
+                            monthlyPrice = prices[index];
+                        } else {
+                            printHouseNotFound();
+                            continue;
                         }
 
                         // 接收合約租期
