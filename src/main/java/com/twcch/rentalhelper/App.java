@@ -70,55 +70,61 @@ public class App {
 
                         int index = scanner.nextInt();
 
-                        if (index >= 0 && index < areas.length) {
-                            System.out.println(getHouseString(index, areas[index], types[index], prices[index], owners[index], addresses[index]));
-                        } else {
+                        if (!(index >= 0 && index < areas.length)) {
                             printHouseNotFound();
+                            continue;
                         }
+
+                        System.out.println(getHouseString(index, areas[index], types[index], prices[index], owners[index], addresses[index]));
 
                         break;
                     }
                     case 3: {
                         // 租金試算
-
                         printHouseQuery();
 
                         int index = scanner.nextInt();
-                        int monthlyPrice = 0;
 
-                        if (index >= 0 && index < areas.length) {
-                            monthlyPrice = prices[index];
-                        } else {
+                        if (!(index >= 0 && index < areas.length)) {
                             printHouseNotFound();
                             continue;
                         }
 
+                        int monthlyPrice = prices[index];
+
                         // 接收合約租期
                         System.out.println("請輸入合約租期(月): ");
                         int expectMonths = scanner.nextInt();
+
                         if (expectMonths < 0) {
                             printInvalidData();
-                        } else {
-                            // 接收壓金期數
-                            System.out.println("請輸入押金期數(月): ");
-                            int depositMonths = scanner.nextInt();
-                            if (depositMonths < 0) {
-                                printInvalidData();
-                            } else {
-                                // 接收實際租期
-                                System.out.println("請輸入實際租期(月): ");
-                                int actualMonths = scanner.nextInt();
-                                if (actualMonths > expectMonths || actualMonths < 0) {
-                                    printInvalidData();
-                                } else {
-                                    // 進行租金試算
-                                    int total = monthlyPrice * actualMonths + ((actualMonths < depositMonths) ? (depositMonths * monthlyPrice) : 0);
-                                    float average = (float) total / actualMonths;
-                                    System.out.println("租金總額: " + total + " 元");
-                                    System.out.println("月平均租金: " + average + " 元");
-                                }
-                            }
+                            continue;
                         }
+
+                        // 接收壓金期數
+                        System.out.println("請輸入押金期數(月): ");
+                        int depositMonths = scanner.nextInt();
+
+                        if (depositMonths < 0) {
+                            printInvalidData();
+                            continue;
+                        }
+
+                        // 接收實際租期
+                        System.out.println("請輸入實際租期(月): ");
+                        int actualMonths = scanner.nextInt();
+
+                        if (actualMonths > expectMonths || actualMonths < 0) {
+                            printInvalidData();
+                            continue;
+                        }
+
+                        // 進行租金試算
+                        int total = monthlyPrice * actualMonths
+                                + ((actualMonths < depositMonths) ? (depositMonths * monthlyPrice) : 0);
+                        float average = (float) total / actualMonths;
+                        System.out.println("租金總額: " + total + " 元");
+                        System.out.println("月平均租金: " + average + " 元");
 
                         break;
                     }
