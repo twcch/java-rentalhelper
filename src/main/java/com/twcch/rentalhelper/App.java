@@ -39,7 +39,8 @@ public class App {
             System.out.println("歡迎使用Rent Helper，請選擇功能:");
             System.out.println("1. 陳列出所有租屋房屋");
             System.out.println("2. 房屋出租查詢");
-            System.out.println("3. 離開");
+            System.out.println("3. 租金試算");
+            System.out.println("4. 離開");
 
             if (scanner.hasNextInt()) { // 判斷 user 的輸入值，須為 integer
                 int option = scanner.nextInt();
@@ -50,8 +51,8 @@ public class App {
                         System.out.println(infoB);
                         System.out.println(infoC);
                         break;
-                    case 2:
-                        System.out.println("請輸入物件名稱 (A or B or C)");
+                    case 2: { // 建立 block ，可以讓 case 2 與 case 3 的變數屬於不同 block
+                        System.out.println("請輸入物件名稱 (A or B or C): ");
                         String id = scanner.next();
                         switch (id) {
                             case "A":
@@ -68,7 +69,57 @@ public class App {
                                 break;
                         }
                         break;
-                    case 3:
+                    }
+                    case 3: {
+                        // 租金試算
+                        System.out.println("請輸入物件名稱 (A or B or C): ");
+                        String id = scanner.next();
+                        int monthlyPrice = 0;
+                        switch (id) {
+                            case "A":
+                                monthlyPrice = priceA;
+                                break;
+                            case "B":
+                                monthlyPrice = priceB;
+                                break;
+                            case "C":
+                                monthlyPrice = priceC;
+                                break;
+                            default:
+                                System.out.println("很抱歉，物件不存在!");
+                                continue;
+                        }
+
+                        // 接收合約租期
+                        System.out.println("請輸入合約租期(月): ");
+                        int expectMonths = scanner.nextInt();
+                        if (expectMonths < 0) {
+                            System.out.println("資料無效");
+                        } else {
+                            // 接收壓金期數
+                            System.out.println("請輸入押金期數(月): ");
+                            int depositMonths = scanner.nextInt();
+                            if (depositMonths < 0) {
+                                System.out.println("資料無效");
+                            } else {
+                                // 接收實際租期
+                                System.out.println("請輸入實際租期(月): ");
+                                int actualMonths = scanner.nextInt();
+                                if (actualMonths > expectMonths || actualMonths < 0) {
+                                    System.out.println("資料無效");
+                                } else {
+                                    // 進行租金試算
+                                    int total = monthlyPrice * actualMonths + ((actualMonths < depositMonths) ? (depositMonths * monthlyPrice) : 0);
+                                    float average = (float) total / actualMonths;
+                                    System.out.println("租金總額: " + total + " 元");
+                                    System.out.println("月平均租金: " + average + " 元");
+                                }
+                            }
+                        }
+
+                        break;
+                    }
+                    case 4:
                         break mainLoop; // 中斷 mainLoop
                     default:
                         break;
