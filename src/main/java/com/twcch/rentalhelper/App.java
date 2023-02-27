@@ -78,7 +78,7 @@ public class App {
                  * 移動參考點使用
                  * 當 user 輸入的值，非 integer 而跳過 nextInt 時，會導致 scanner 的參考點未移動，而進入無限迴圈
                  */
-                String badOption = scanner.next();
+                scanner.next();
             }
         }
 
