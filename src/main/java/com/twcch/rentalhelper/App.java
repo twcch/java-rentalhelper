@@ -32,7 +32,8 @@ public class App {
     }
 
     public static House[] readHouses(String path) throws FileNotFoundException {
-        Scanner fileScanner = new Scanner(new File(path));
+
+        Scanner fileScanner = new Scanner(new File(path)); // 可能發生 exception ， exception 產生的原因會是外界傳入 path 錯誤導致，故該 exception 應由外界處理
 
         House[] result = new House[1]; // 初始化大小為1的陣列
 
@@ -67,11 +68,30 @@ public class App {
 
     }
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) {
 
-        House[] houses = readHouses("C:\\Users\\twcch\\OneDrive\\桌面\\houses.csv");
+        String defaultPath = "D:\\Develop\\Source Code\\java-code\\java-rentalhelper\\src\\main\\resources\\houses.csv";
+        House[] houses = null;
 
         Scanner scanner = new Scanner(System.in);
+
+        try {
+            houses = readHouses(defaultPath);
+        } catch (FileNotFoundException e) {
+            System.out.println("檔案不存在預設路徑: " + defaultPath);
+            System.out.println("請重新輸入csv檔路徑");
+            /*
+             * 不用 scanner.next 因為機制會取到空白為斷點，如果 path 中含有空白會導致路徑不完全
+             * scanner.nextLine 不會有前述的問題
+             */
+            String inputPath = scanner.nextLine();
+            try {
+                houses = readHouses(inputPath);
+            } catch (FileNotFoundException e2) {
+                System.out.println("檔案不存在於路徑: " + inputPath);
+                return;
+            }
+        }
 
         // while (true) 進行命名
         mainLoop:
