@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 
 public class App {
@@ -67,7 +68,7 @@ public class App {
     public static void main(String[] args) {
 
         String defaultPath = "D:\\Develop\\Source Code\\java-code\\java-rentalhelper\\src\\main\\resources\\houses.csv";
-        ArrayList<House> houses = null;
+        List<House> houses = null;
 
         Scanner scanner = new Scanner(System.in);
 
