@@ -34,7 +34,7 @@ public class App {
     public static House[] readHouses(String path) throws FileNotFoundException {
         Scanner fileScanner = new Scanner(new File(path));
 
-        House[] result = new House[1];
+        House[] result = new House[1]; // 初始化大小為1的陣列
 
         int lineNo = 0;
         while (fileScanner.hasNextLine()) {
