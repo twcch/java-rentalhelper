@@ -2,7 +2,8 @@ package com.twcch.rentalhelper;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 public class App {
@@ -31,11 +32,11 @@ public class App {
         return "索引" + id + "物件 - " + house.getString();
     }
 
-    public static House[] readHouses(String path) throws FileNotFoundException {
+    public static ArrayList<House> readHouses(String path) throws FileNotFoundException {
 
         Scanner fileScanner = new Scanner(new File(path)); // 可能發生 exception ， exception 產生的原因會是外界傳入 path 錯誤導致，故該 exception 應由外界處理
 
-        House[] result = new House[1]; // 初始化大小為1的陣列
+        ArrayList<House> result = new ArrayList<>();
 
         int lineNo = 0;
         while (fileScanner.hasNextLine()) {
@@ -54,15 +55,10 @@ public class App {
             String owner = values[3];
             String address = values[4];
 
-            if (lineNo - 2 == result.length) { // array 空間不足，延伸陣列
-                result = Arrays.copyOf(result, result.length * 2);
-            }
-
-            result[lineNo - 2] = new House(area, type, price, owner, address);
-
+            House house = new House(area, type, price, owner, address);
+            result.add(house);
         }
 
-        result = Arrays.copyOf(result, lineNo - 1); // 縮減 array null 的部份
         fileScanner.close(); // close scanner
         return result;
 
@@ -71,7 +67,7 @@ public class App {
     public static void main(String[] args) {
 
         String defaultPath = "D:\\Develop\\Source Code\\java-code\\java-rentalhelper\\src\\main\\resources\\houses.csv";
-        House[] houses = null;
+        ArrayList<House> houses = null;
 
         Scanner scanner = new Scanner(System.in);
 
@@ -93,7 +89,7 @@ public class App {
             }
         }
 
-        Arrays.sort(houses, new HouseComparator());
+        Collections.sort(houses, new HouseComparator());
 
         // while (true) 進行命名
         mainLoop:
@@ -106,8 +102,8 @@ public class App {
 
                 switch (option) {
                     case 1:
-                        for (int i = 0; i < houses.length; i++) {
-                            System.out.println(getHouseString(i, houses[i]));
+                        for (int i = 0; i < houses.size(); i++) {
+                            System.out.println(getHouseString(i, houses.get(i)));
                         }
 
                         break;
@@ -117,12 +113,12 @@ public class App {
 
                         int index = scanner.nextInt();
 
-                        if (!(index >= 0 && index < houses.length)) {
+                        if (!(index >= 0 && index < houses.size())) {
                             printHouseNotFound();
                             continue;
                         }
 
-                        System.out.println(getHouseString(index, houses[index]));
+                        System.out.println(getHouseString(index, houses.get(index)));
 
                         break;
                     }
@@ -132,12 +128,12 @@ public class App {
 
                         int index = scanner.nextInt();
 
-                        if (!(index >= 0 && index < houses.length)) {
+                        if (!(index >= 0 && index < houses.size())) {
                             printHouseNotFound();
                             continue;
                         }
 
-                        int monthlyPrice = houses[index].getPrice();
+                        int monthlyPrice = houses.get(index).getPrice();
 
                         // 接收合約租期
                         System.out.println("請輸入合約租期(月): ");
