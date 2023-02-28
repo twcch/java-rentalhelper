@@ -5,46 +5,35 @@ import java.util.Scanner;
 public class App {
 
     public static void printGuide() {
-
         System.out.println("歡迎使用Rent Helper，請選擇功能:");
         System.out.println("1. 陳列出所有租屋房屋");
         System.out.println("2. 房屋出租查詢");
         System.out.println("3. 租金試算");
         System.out.println("4. 離開");
-
     }
 
     public static void printHouseQuery() {
-
         System.out.println("請輸入物件索引: ");
-
     }
 
     public static void printHouseNotFound() {
-
         System.out.println("很抱歉，物件不存在!");
-
     }
 
     public static void printInvalidData() {
-
         System.out.println("資料無效!");
-
     }
 
-    public static String getHouseString(int id, float area, String type, int price, String owner, String address) {
-
-        return "索引" + id + "物件 - " + area + "坪 - " + type + " - 每月" + price + "元 - 屋主: " + owner + " - 地址: " + address;
-
+    public static String getHouseString(int id, House house) {
+        return "索引" + id + "物件 - " + house.getString();
     }
 
     public static void main(String[] args) {
 
-        float[] areas = new float[]{10F, 8F, 4F};
-        String[] types = new String[]{"套房", "套房", "雅房"};
-        int[] prices = new int[]{12000, 8000, 6000};
-        String[] owners = new String[]{"王先生", "陳先生", "林先生"};
-        String[] addresses = new String[]{"台北市文山區木柵路一段xx號", "新北市中和區中和路yy號", "新北市新店區中正路aa巷zz號"};
+        House[] houses = new House[3]; // [null, null, null]
+        houses[0] = new House(10F, "套房", 12000, "王先生", "台北市文山區木柵路一段xx號");
+        houses[1] = new House(8F, "套房", 8000, "陳先生", "新北市中和區中和路yy號");
+        houses[2] = new House(4F, "雅房", 6000, "林先生", "新北市新店區中正路aa巷zz號");
 
         Scanner scanner = new Scanner(System.in);
 
@@ -59,8 +48,8 @@ public class App {
 
                 switch (option) {
                     case 1:
-                        for (int i = 0; i < areas.length; i++) {
-                            System.out.println(getHouseString(i, areas[i], types[i], prices[i], owners[i], addresses[i]));
+                        for (int i = 0; i < houses.length; i++) {
+                            System.out.println(getHouseString(i, houses[i]));
                         }
 
                         break;
@@ -70,12 +59,12 @@ public class App {
 
                         int index = scanner.nextInt();
 
-                        if (!(index >= 0 && index < areas.length)) {
+                        if (!(index >= 0 && index < houses.length)) {
                             printHouseNotFound();
                             continue;
                         }
 
-                        System.out.println(getHouseString(index, areas[index], types[index], prices[index], owners[index], addresses[index]));
+                        System.out.println(getHouseString(index, houses[index]));
 
                         break;
                     }
@@ -85,12 +74,12 @@ public class App {
 
                         int index = scanner.nextInt();
 
-                        if (!(index >= 0 && index < areas.length)) {
+                        if (!(index >= 0 && index < houses.length)) {
                             printHouseNotFound();
                             continue;
                         }
 
-                        int monthlyPrice = prices[index];
+                        int monthlyPrice = houses[index].getPrice();
 
                         // 接收合約租期
                         System.out.println("請輸入合約租期(月): ");
