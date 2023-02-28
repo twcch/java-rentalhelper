@@ -93,6 +93,8 @@ public class App {
             }
         }
 
+        Arrays.sort(houses, new HouseComparator());
+
         // while (true) 進行命名
         mainLoop:
         while (true) {
