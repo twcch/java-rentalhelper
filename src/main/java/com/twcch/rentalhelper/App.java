@@ -1,5 +1,8 @@
 package com.twcch.rentalhelper;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class App {
@@ -28,12 +31,45 @@ public class App {
         return "索引" + id + "物件 - " + house.getString();
     }
 
-    public static void main(String[] args) {
+    public static House[] readHouses(String path) throws FileNotFoundException {
+        Scanner fileScanner = new Scanner(new File(path));
 
-        House[] houses = new House[3]; // [null, null, null]
-        houses[0] = new House(10F, "套房", 12000, "王先生", "台北市文山區木柵路一段xx號");
-        houses[1] = new House(8F, "套房", 8000, "陳先生", "新北市中和區中和路yy號");
-        houses[2] = new House(4F, "雅房", 6000, "林先生", "新北市新店區中正路aa巷zz號");
+        House[] result = new House[1];
+
+        int lineNo = 0;
+        while (fileScanner.hasNextLine()) {
+            lineNo++;
+            String line = fileScanner.nextLine();
+
+            if (lineNo == 1) { // 避免取到表頭
+                continue;
+            }
+
+            String[] values = line.split(",");
+
+            float area = Float.parseFloat(values[0]);
+            String type = values[1];
+            int price = Integer.parseInt(values[2]);
+            String owner = values[3];
+            String address = values[4];
+
+            if (lineNo - 2 == result.length) { // array 空間不足，延伸陣列
+                result = Arrays.copyOf(result, result.length * 2);
+            }
+
+            result[lineNo - 2] = new House(area, type, price, owner, address);
+
+        }
+
+        result = Arrays.copyOf(result, lineNo - 1); // 縮減 array null 的部份
+
+        return result;
+
+    }
+
+    public static void main(String[] args) throws FileNotFoundException {
+
+        House[] houses = readHouses("C:\\Users\\twcch\\OneDrive\\桌面\\houses.csv");
 
         Scanner scanner = new Scanner(System.in);
 
