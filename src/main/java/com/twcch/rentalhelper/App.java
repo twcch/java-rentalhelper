@@ -62,7 +62,7 @@ public class App {
         }
 
         result = Arrays.copyOf(result, lineNo - 1); // 縮減 array null 的部份
-
+        fileScanner.close(); // close scanner
         return result;
 
     }
